@@ -116,7 +116,7 @@ var ATBS = ATBS || {};
             var $offCanvasToggle = $('.js-atbs-offcanvas-toggle');
             var $offCanvasClose = $('.js-atbs-offcanvas-close');
             var $offCanvasMenuHasChildren = $('.navigation--offcanvas').find('li.menu-item-has-children > a');
-            var menuExpander = ('<div class="submenu-toggle"><i class="mdicon mdicon-expand_more"></i></div>');
+            var menuExpander = ('<div class="submenu-toggle"><i class="fa-solid fa-caret-down"></i></div>');
 
             $backdrop.on('click', function(){
                 $offCanvas.removeClass('is-active');
