@@ -1,6 +1,6 @@
 var ATBS = ATBS || {};
 
-(function($){
+(function ($) {
 
     // USE STRICT
     "use strict";
@@ -8,10 +8,10 @@ var ATBS = ATBS || {};
     var $window = $(window);
     var $document = $(document);
     var $goToTopEl = $('.js-go-top-el');
-    
+
     ATBS.header = {
 
-        init: function(){
+        init: function () {
             ATBS.header.ajaxSearch();
             ATBS.header.atbsSearchButton();
             ATBS.header.offCanvasMenu();
@@ -25,33 +25,33 @@ var ATBS = ATBS || {};
         /* ============================================================================
          * AJAX search
          * ==========================================================================*/
-        atbsSearchButton: function() {
+        atbsSearchButton: function () {
             var btnSearchOpen = $('.js-btn-search-open');
             var btnSearchClose = $('.js-btn-search-close');
             var formSearch = $('.atbs-search-form');
             btnSearchOpen.each(function () {
-               $(this).on('click',function () {
-                   $(formSearch).addClass('Open');
-                   setTimeout(function () {
-                       $(formSearch).addClass('Active-Animation');
-                   },600);
-               });
+                $(this).on('click', function () {
+                    $(formSearch).addClass('Open');
+                    setTimeout(function () {
+                        $(formSearch).addClass('Active-Animation');
+                    }, 600);
+                });
             });
             btnSearchClose.each(function () {
-               $(this).on('click',function () {
-                   $(formSearch).removeClass('Open');
-                   $(formSearch).removeClass('Active-Animation');
-               });
+                $(this).on('click', function () {
+                    $(formSearch).removeClass('Open');
+                    $(formSearch).removeClass('Active-Animation');
+                });
             });
         },
-        ajaxSearch: function() {
+        ajaxSearch: function () {
             var $results = '';
             var $ajaxSearch = $('.js-ajax-search');
             var ajaxStatus = '';
             var noResultText = '<span class="noresult-text">There is no result.</span>';
             var errorText = '<span class="error-text">There was some error.</span>';
 
-            $ajaxSearch.each(function() {
+            $ajaxSearch.each(function () {
                 var $this = $(this);
                 var $searchForm = $this.find('.search-form__input');
                 var $resultsContainer = $this.find('.search-results');
@@ -59,13 +59,13 @@ var ATBS = ATBS || {};
                 var searchTerm = '';
                 var lastSearchTerm = '';
 
-                $searchForm.on('input', $.debounce(800, function() {
+                $searchForm.on('input', $.debounce(800, function () {
                     searchTerm = $searchForm.val();
 
                     if (searchTerm.length > 0) {
                         $resultsContainer.addClass('is-active');
 
-                        if ((searchTerm != lastSearchTerm) || (ajaxStatus === 'failed' )) {
+                        if ((searchTerm != lastSearchTerm) || (ajaxStatus === 'failed')) {
                             $resultsContainer.removeClass('is-error').addClass('is-loading');
                             lastSearchTerm = searchTerm;
                             ajaxLoad(searchTerm, $resultsContainer, $resultsInner);
@@ -77,7 +77,7 @@ var ATBS = ATBS || {};
             });
 
             function ajaxLoad(searchTerm, $resultsContainer, $resultsInner) {
-                var	ajaxCall = $.ajax({
+                var ajaxCall = $.ajax({
                     url: "inc/ajax-search.html",
                     type: 'post',
                     dataType: 'html',
@@ -86,23 +86,23 @@ var ATBS = ATBS || {};
                     },
                 });
 
-                ajaxCall.done(function(respond) {
+                ajaxCall.done(function (respond) {
                     $results = $(respond);
                     ajaxStatus = 'success';
                     if (!$results.length) {
                         $results = noResultText;
                     }
-                    $resultsInner.html($results).css('opacity', 0).animate({opacity: 1}, 500);
+                    $resultsInner.html($results).css('opacity', 0).animate({ opacity: 1 }, 500);
                 });
 
-                ajaxCall.fail(function() {
+                ajaxCall.fail(function () {
                     ajaxStatus = 'failed';
                     $resultsContainer.addClass('is-error');
                     $results = errorText;
-                    $resultsInner.html($results).css('opacity', 0).animate({opacity: 1}, 500);
+                    $resultsInner.html($results).css('opacity', 0).animate({ opacity: 1 }, 500);
                 });
 
-                ajaxCall.always(function() {
+                ajaxCall.always(function () {
                     $resultsContainer.removeClass('is-loading');
                 });
             }
@@ -110,7 +110,7 @@ var ATBS = ATBS || {};
         /* ============================================================================
          * Offcanvas Menu
          * ==========================================================================*/
-        offCanvasMenu: function() {
+        offCanvasMenu: function () {
             var $backdrop = $('<div class="atbs-offcanvas-backdrop"></div>');
             var $offCanvas = $('.js-atbs-offcanvas');
             var $offCanvasToggle = $('.js-atbs-offcanvas-toggle');
@@ -118,14 +118,14 @@ var ATBS = ATBS || {};
             var $offCanvasMenuHasChildren = $('.navigation--offcanvas').find('li.menu-item-has-children > a');
             var menuExpander = ('<div class="submenu-toggle"><i class="fa-solid fa-caret-down"></i></div>');
 
-            $backdrop.on('click', function(){
+            $backdrop.on('click', function () {
                 $offCanvas.removeClass('is-active');
-                $(this).fadeOut(200, function(){
+                $(this).fadeOut(200, function () {
                     $(this).detach();
                 });
             });
 
-            $offCanvasToggle.on('click', function(e){
+            $offCanvasToggle.on('click', function (e) {
                 e.preventDefault();
                 var targetID = $(this).attr('href');
                 var $target = $(targetID);
@@ -133,18 +133,18 @@ var ATBS = ATBS || {};
                 $backdrop.hide().appendTo(document.body).fadeIn(200);
             });
 
-            $offCanvasClose.on('click', function(e){
+            $offCanvasClose.on('click', function (e) {
                 e.preventDefault();
                 var targetID = $(this).attr('href');
                 var $target = $(targetID);
                 $target.removeClass('is-active');
-                $backdrop.fadeOut(200, function(){
+                $backdrop.fadeOut(200, function () {
                     $(this).detach();
                 });
             });
 
-            $offCanvasMenuHasChildren.append(function() {
-                return $(menuExpander).on('click', function(e){
+            $offCanvasMenuHasChildren.append(function () {
+                return $(menuExpander).on('click', function (e) {
                     e.preventDefault();
                     var $subMenu = $(this).parent().siblings('.sub-menu');
 
@@ -152,26 +152,26 @@ var ATBS = ATBS || {};
                 });
             });
 
-            $(window).on('resize',function (e) {
-                var checkExist = setInterval(function() {
+            $(window).on('resize', function (e) {
+                var checkExist = setInterval(function () {
                     var elementPC = $('#atbs-offcanvas-primary');
                     var elementMB = $('#atbs-offcanvas-mobile');
-                    if(elementPC.hasClass('is-active') ){
+                    if (elementPC.hasClass('is-active')) {
                         var checkDisplay = elementPC.css('display');
-                        if(checkDisplay == 'none' ){
-                            $backdrop.css('display','none');
+                        if (checkDisplay == 'none') {
+                            $backdrop.css('display', 'none');
                             clearInterval(checkExist);
                         }
                     }
-                    if(elementMB.hasClass('is-active')) {
+                    if (elementMB.hasClass('is-active')) {
                         var checkDisplay = elementMB.css('display');
-                        if( checkDisplay == 'none'){
-                            $backdrop.css('display','none');
+                        if (checkDisplay == 'none') {
+                            $backdrop.css('display', 'none');
                             clearInterval(checkExist);
                         }
                     }
-                    if(elementPC.hasClass('is-active')  && elementPC.css('display') != 'none' || elementMB.hasClass('is-active')  && elementMB.css('display') != 'none'){
-                        $backdrop.css('display','block');
+                    if (elementPC.hasClass('is-active') && elementPC.css('display') != 'none' || elementMB.hasClass('is-active') && elementMB.css('display') != 'none') {
+                        $backdrop.css('display', 'block');
                         clearInterval(checkExist);
                     }
                     clearInterval(checkExist);
@@ -182,7 +182,7 @@ var ATBS = ATBS || {};
         /* ============================================================================
          * Header dropdown search
          * ==========================================================================*/
-        searchToggle: function() {
+        searchToggle: function () {
             var $headerSearchDropdown = $('#header-search-dropdown');
             var $searchDropdownToggle = $('.js-search-dropdown-toggle');
             var $mobileHeader = $('#atbs-mobile-header');
@@ -190,11 +190,11 @@ var ATBS = ATBS || {};
             var $staticHeaderNav = $('.site-header').find('.navigation-bar__inner');
             var $headerSearchDropdownInput = $headerSearchDropdown.find('.search-form__input');
 
-            $headerSearchDropdown.on('click', function(e) {
+            $headerSearchDropdown.on('click', function (e) {
                 e.stopPropagation();
             });
 
-            $searchDropdownToggle.on('click', function(e) {
+            $searchDropdownToggle.on('click', function (e) {
                 e.stopPropagation();
                 var $toggleBtn = $(this);
                 var position = '';
@@ -212,7 +212,7 @@ var ATBS = ATBS || {};
                     $headerSearchDropdown.toggleClass('is-active');
                 }
 
-                switch(position) {
+                switch (position) {
                     case 'mobile':
                         if (!$headerSearchDropdown.hasClass('is-in-mobile')) {
                             $headerSearchDropdown.addClass('is-in-mobile');
@@ -247,11 +247,11 @@ var ATBS = ATBS || {};
                 }
             });
 
-            $document.on('click', function() {
+            $document.on('click', function () {
                 $headerSearchDropdown.removeClass('is-active');
             });
 
-            $window.on('stickyHeaderHidden', function(){
+            $window.on('stickyHeaderHidden', function () {
                 if ($headerSearchDropdown.hasClass('is-in-sticky')) {
                     $headerSearchDropdown.removeClass('is-active');
                 }
@@ -260,9 +260,9 @@ var ATBS = ATBS || {};
         /* ============================================================================
          * Prority+ menu init
          * ==========================================================================*/
-        priorityNavInit: function() {
+        priorityNavInit: function () {
             var $menus = $('.js-priority-nav');
-            $menus.each(function() {
+            $menus.each(function () {
                 ATBS.priorityNav($(this));
             })
         },
@@ -278,22 +278,22 @@ var ATBS = ATBS || {};
             isDisabled: false,
             isFixed: false, //the current state of the menu, true if the menu is affix
             isShown: false,
-            windowScrollTop: 0, 
+            windowScrollTop: 0,
             lastWindowScrollTop: 0, //last scrollTop position, used to calculate the scroll direction
             offCheckpoint: 0, // distance from top where fixed header will be hidden
             onCheckpoint: 0, // distance from top where fixed header can show up
             breakpoint: 992, // media breakpoint in px that it will be disabled
 
-            init : function init (options) {
+            init: function init(options) {
 
                 //read the settings
                 this.$fixedHeader = $(options.fixedHeader);
                 this.$headerPlaceHolder = $(options.headerPlaceHolder);
 
                 // Check if selectors exist.
-                if ( !this.$fixedHeader.length || !this.$headerPlaceHolder.length ) {
+                if (!this.$fixedHeader.length || !this.$headerPlaceHolder.length) {
                     this.isDestroyed = true;
-                } else if ( !this.$fixedHeader.length || !this.$headerPlaceHolder.length || ( ATBS.documentOnResize.windowWidth <= ATBS.header.smartAffix.breakpoint ) ) { // Check if device width is smaller than breakpoint.
+                } else if (!this.$fixedHeader.length || !this.$headerPlaceHolder.length || (ATBS.documentOnResize.windowWidth <= ATBS.header.smartAffix.breakpoint)) { // Check if device width is smaller than breakpoint.
                     this.isDisabled = true;
                 }
 
@@ -323,22 +323,22 @@ var ATBS = ATBS || {};
             updateState: function updateState() {
                 //update affixed state
                 if (this.isFixed) {
-                    if(this.$fixedHeader.length) {
+                    if (this.$fixedHeader.length) {
                         this.$fixedHeader.addClass('is-fixed');
                     }
                 } else {
-                    if(this.$fixedHeader.length) {
+                    if (this.$fixedHeader.length) {
                         this.$fixedHeader.removeClass('is-fixed');
                     }
                     $window.trigger('stickyHeaderHidden');
                 }
 
                 if (this.isShown) {
-                    if(this.$fixedHeader.length) {
+                    if (this.$fixedHeader.length) {
                         this.$fixedHeader.addClass('is-shown');
                     }
                 } else {
-                    if(this.$fixedHeader.length) {
+                    if (this.$fixedHeader.length) {
                         this.$fixedHeader.removeClass('is-shown');
                     }
                 }
@@ -372,7 +372,7 @@ var ATBS = ATBS || {};
                     } else {
                         this.isFixed = false;
                     }
-                    
+
                     // check affix state
                     if (this.isFixed) {
                         // We're in affixed state, let's do some check
@@ -398,7 +398,7 @@ var ATBS = ATBS || {};
             */
             eventResize: function eventResize(windowWidth) {
                 // Check if device width is smaller than breakpoint.
-                if ( ATBS.documentOnResize.windowWidth < ATBS.header.smartAffix.breakpoint ) {
+                if (ATBS.documentOnResize.windowWidth < ATBS.header.smartAffix.breakpoint) {
                     this.isDisabled = true;
                 } else {
                     this.isDisabled = false;
@@ -413,10 +413,10 @@ var ATBS = ATBS || {};
         ticking: false,
         windowScrollTop: 0, //used to store the scrollTop
 
-        init: function() {
-            window.addEventListener('scroll', function(e) {
+        init: function () {
+            window.addEventListener('scroll', function (e) {
                 if (!ATBS.documentOnScroll.ticking) {
-                    window.requestAnimationFrame(function() {
+                    window.requestAnimationFrame(function () {
                         ATBS.documentOnScroll.windowScrollTop = $window.scrollTop();
 
                         // Functions to call here
@@ -436,9 +436,9 @@ var ATBS = ATBS || {};
         /* ============================================================================
          * Go to top scroll event
          * ==========================================================================*/
-        goToTopScroll: function(windowScrollTop){
+        goToTopScroll: function (windowScrollTop) {
             if ($goToTopEl.length) {
-                if(windowScrollTop > 800) {
+                if (windowScrollTop > 800) {
                     if (!$goToTopEl.hasClass('is-active')) $goToTopEl.addClass('is-active');
                 } else {
                     $goToTopEl.removeClass('is-active');
@@ -451,10 +451,10 @@ var ATBS = ATBS || {};
         ticking: false,
         windowWidth: $window.width(),
 
-        init: function() {
-            window.addEventListener('resize', function(e) {
+        init: function () {
+            window.addEventListener('resize', function (e) {
                 if (!ATBS.documentOnResize.ticking) {
-                    window.requestAnimationFrame(function() {
+                    window.requestAnimationFrame(function () {
                         ATBS.documentOnResize.windowWidth = $window.width();
 
                         // Functions to call here
@@ -472,7 +472,7 @@ var ATBS = ATBS || {};
 
     ATBS.documentOnReady = {
 
-        init: function(){
+        init: function () {
             ATBS.header.init();
             ATBS.header.smartAffix.compute();
             ATBS.documentOnScroll.init();
@@ -517,10 +517,10 @@ var ATBS = ATBS || {};
         /* ============================================================================
          * Scroll top
          * ==========================================================================*/
-        goToTop: function() {
+        goToTop: function () {
             if ($goToTopEl.length) {
-                $goToTopEl.on('click', function() {
-                    $('html,body').stop(true).animate({scrollTop:0},400);
+                $goToTopEl.on('click', function () {
+                    $('html,body').stop(true).animate({ scrollTop: 0 }, 400);
                     return false;
                 });
             }
@@ -529,28 +529,28 @@ var ATBS = ATBS || {};
         /* ============================================================================
         * Pattern Circle Move Random
         * ==========================================================================*/
-        circleMoveRandom : function() {
+        circleMoveRandom: function () {
             var canvasFrame = document.getElementsByClassName('canvas-circle-move-random');
             // // Set Canvas dimensions
-            var radius = [21,20,12] ;
+            var radius = [21, 20, 12];
             $(canvasFrame).each(function (index, el) {
                 var strColors = $(el).data('color');
                 var circleColors = strColors.split(",");
                 // Get drawing context
-                var canvas = el.getContext( '2d' );
-                el.width   = 370;
-                el.height  = 370;
+                var canvas = el.getContext('2d');
+                el.width = 370;
+                el.height = 370;
                 // The Circle class
-                function ColoredCircle( x, y, dx, dy, radius, color ) {
-                    this.x 	= x;
-                    this.y 	= y;
+                function ColoredCircle(x, y, dx, dy, radius, color) {
+                    this.x = x;
+                    this.y = y;
                     this.dx = dx;
                     this.dy = dy;
                     this.radius = radius;
-                    this.color 	= color;
-                    this.draw = function() {
+                    this.color = color;
+                    this.draw = function () {
                         canvas.beginPath();
-                        canvas.arc( this.x, this.y, this.radius, 0, Math.PI * 2, false );
+                        canvas.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
                         canvas.shadowBlur = 5;
                         canvas.shadowOffsetX = 0;
                         canvas.shadowOffsetY = 5;
@@ -558,11 +558,11 @@ var ATBS = ATBS || {};
                         canvas.fillStyle = this.color;
                         canvas.fill();
                     };
-                    this.update = function() {
-                        if( this.x + this.radius > 370 || this.x - this.radius < 0 ) {
+                    this.update = function () {
+                        if (this.x + this.radius > 370 || this.x - this.radius < 0) {
                             this.dx = -this.dx;
                         }
-                        if( this.y + this.radius > 370 || this.y - this.radius < 0 ) {
+                        if (this.y + this.radius > 370 || this.y - this.radius < 0) {
                             this.dy = -this.dy;
                         }
                         this.x += this.dx;
@@ -572,24 +572,24 @@ var ATBS = ATBS || {};
                 }
                 var coloredCircles = [];
                 // Radius
-                for( var i = 0; i < 3; i++ )  {
-                    var  radius_item = radius[i];
+                for (var i = 0; i < 3; i++) {
+                    var radius_item = radius[i];
                     // Starting Position
-                    var x = Math.random() * ( 370 - radius_item * 2 ) + radius_item;
-                    var y = Math.random() * ( 370 - radius_item * 2) + radius_item;
+                    var x = Math.random() * (370 - radius_item * 2) + radius_item;
+                    var y = Math.random() * (370 - radius_item * 2) + radius_item;
 
                     // Speed in x and y direction
                     var dx = 0.8;
                     var dy = 0.9;
 
                     // Color
-                    var color = circleColors[ i ];
-                    coloredCircles.push( new ColoredCircle( x, y, dx, dy, radius_item, color ) );
+                    var color = circleColors[i];
+                    coloredCircles.push(new ColoredCircle(x, y, dx, dy, radius_item, color));
                 }
                 function createCanvasPointMove() {
-                    requestAnimationFrame( createCanvasPointMove );
-                    canvas.clearRect( 0, 0, 370, 370 );
-                    for( var r = 0; r < 3; r++ ) {
+                    requestAnimationFrame(createCanvasPointMove);
+                    canvas.clearRect(0, 0, 370, 370);
+                    for (var r = 0; r < 3; r++) {
                         coloredCircles[r].update();
                     }
                 }
@@ -600,9 +600,9 @@ var ATBS = ATBS || {};
         /* ============================================================================
         * Carousel
         * ==========================================================================*/
-        carousel_1i: function() {
+        carousel_1i: function () {
             var $carousels = $('.js-atbs-carousel-1i');
-            $carousels.each( function() {
+            $carousels.each(function () {
                 $(this).owlCarousel({
                     items: 1,
                     margin: 60,
@@ -613,13 +613,13 @@ var ATBS = ATBS || {};
                     navText: ['<i class="mdicon mdicon-navigate_before"></i>', '<i class="mdicon mdicon-navigate_next"></i>'],
                     smartSpeed: 500,
                     responsive: {
-                        0 : {
+                        0: {
                             items: 1,
                             dots: true,
                             // nav: false,
                             margin: 40,
                         },
-                        576 : {
+                        576: {
                             items: 1,
                             margin: 50,
                         },
@@ -631,13 +631,13 @@ var ATBS = ATBS || {};
                         }
                     },
                 });
-                
+
             })
         },
 
-        carousel_1i_effect: function() {
+        carousel_1i_effect: function () {
             var $carousels = $('.js-atbs-carousel-1i-effect');
-            $carousels.each( function() {
+            $carousels.each(function () {
                 $(this).owlCarousel({
                     items: 1,
                     margin: 60,
@@ -646,19 +646,19 @@ var ATBS = ATBS || {};
                     autoHeight: true,
                     loop: true,
                     navText: ['<svg xmlns="http://www.w3.org/2000/svg" width="80" height="21.818" viewBox="0 0 80 21.818">\n' +
-                    '  <path d="M-28.182,87.727H43.792l-5.987,5.987a1.818,1.818,0,1,0,2.571,2.571l9.091-9.091a1.818,1.818,0,0,0,0-2.571l-9.091-9.091A1.818,1.818,0,0,0,37.805,78.1l5.987,5.987H-28.182A1.818,1.818,0,0,0-30,85.909,1.818,1.818,0,0,0-28.182,87.727Z" transform="translate(50 96.818) rotate(180)" fill="#222" opacity="0.5"/>\n' +
-                    '</svg>\n', '<svg xmlns="http://www.w3.org/2000/svg" width="80" height="21.818" viewBox="0 0 80 21.818">\n' +
-                    '  <path d="M-28.182,87.727H43.792l-5.987,5.987a1.818,1.818,0,1,0,2.571,2.571l9.091-9.091a1.818,1.818,0,0,0,0-2.571l-9.091-9.091A1.818,1.818,0,0,0,37.805,78.1l5.987,5.987H-28.182A1.818,1.818,0,0,0-30,85.909,1.818,1.818,0,0,0-28.182,87.727Z" transform="translate(30 -75)" fill="#222" opacity="0.5"/>\n' +
+                        '  <path d="M-28.182,87.727H43.792l-5.987,5.987a1.818,1.818,0,1,0,2.571,2.571l9.091-9.091a1.818,1.818,0,0,0,0-2.571l-9.091-9.091A1.818,1.818,0,0,0,37.805,78.1l5.987,5.987H-28.182A1.818,1.818,0,0,0-30,85.909,1.818,1.818,0,0,0-28.182,87.727Z" transform="translate(50 96.818) rotate(180)" fill="#222" opacity="0.5"/>\n' +
+                        '</svg>\n', '<svg xmlns="http://www.w3.org/2000/svg" width="80" height="21.818" viewBox="0 0 80 21.818">\n' +
+                        '  <path d="M-28.182,87.727H43.792l-5.987,5.987a1.818,1.818,0,1,0,2.571,2.571l9.091-9.091a1.818,1.818,0,0,0,0-2.571l-9.091-9.091A1.818,1.818,0,0,0,37.805,78.1l5.987,5.987H-28.182A1.818,1.818,0,0,0-30,85.909,1.818,1.818,0,0,0-28.182,87.727Z" transform="translate(30 -75)" fill="#222" opacity="0.5"/>\n' +
                     '</svg>\n'],
                     smartSpeed: 500,
                     responsive: {
-                        0 : {
+                        0: {
                             items: 1,
                             dots: true,
                             nav: false,
                             margin: 40,
                         },
-                        576 : {
+                        576: {
                             items: 1,
                             margin: 50,
                         },
@@ -674,9 +674,9 @@ var ATBS = ATBS || {};
             })
         },
 
-        carousel_1i30m: function() {
+        carousel_1i30m: function () {
             var $carousels = $('.js-atbs-carousel-1i-30m');
-            $carousels.each( function() {
+            $carousels.each(function () {
                 $(this).owlCarousel({
                     items: 1,
                     margin: 30,
@@ -685,9 +685,9 @@ var ATBS = ATBS || {};
                     loop: true,
                     autoHeight: true,
                     navText: ['<svg xmlns="http://www.w3.org/2000/svg" width="50" height="15.584" viewBox="0 0 50 15.584">\n' +
-                    '  <path d="M28.7,84.091H-15.566l4.277,4.277a1.3,1.3,0,0,1,0,1.837,1.3,1.3,0,0,1-.918.38,1.294,1.294,0,0,1-.918-.38l-6.494-6.494a1.3,1.3,0,0,1,0-1.837l6.494-6.494a1.3,1.3,0,0,1,1.837,0,1.3,1.3,0,0,1,0,1.837l-4.277,4.277H28.7a1.3,1.3,0,1,1,0,2.6Z" transform="translate(20 -75)" fill="#fff" opacity="0.2"/>\n' +
-                    '</svg>\n', '<svg xmlns="http://www.w3.org/2000/svg" width="50" height="15.584" viewBox="0 0 50 15.584">\n' +
-                    '  <path d="M-18.7,84.091H25.566l-4.277,4.277A1.3,1.3,0,1,0,23.126,90.2l6.494-6.494a1.3,1.3,0,0,0,0-1.837l-6.494-6.494a1.3,1.3,0,0,0-1.837,1.837l4.277,4.277H-18.7a1.3,1.3,0,0,0-1.3,1.3A1.3,1.3,0,0,0-18.7,84.091Z" transform="translate(20 -75)" fill="#fff" opacity="0.2"/>\n' +
+                        '  <path d="M28.7,84.091H-15.566l4.277,4.277a1.3,1.3,0,0,1,0,1.837,1.3,1.3,0,0,1-.918.38,1.294,1.294,0,0,1-.918-.38l-6.494-6.494a1.3,1.3,0,0,1,0-1.837l6.494-6.494a1.3,1.3,0,0,1,1.837,0,1.3,1.3,0,0,1,0,1.837l-4.277,4.277H28.7a1.3,1.3,0,1,1,0,2.6Z" transform="translate(20 -75)" fill="#fff" opacity="0.2"/>\n' +
+                        '</svg>\n', '<svg xmlns="http://www.w3.org/2000/svg" width="50" height="15.584" viewBox="0 0 50 15.584">\n' +
+                        '  <path d="M-18.7,84.091H25.566l-4.277,4.277A1.3,1.3,0,1,0,23.126,90.2l6.494-6.494a1.3,1.3,0,0,0,0-1.837l-6.494-6.494a1.3,1.3,0,0,0-1.837,1.837l4.277,4.277H-18.7a1.3,1.3,0,0,0-1.3,1.3A1.3,1.3,0,0,0-18.7,84.091Z" transform="translate(20 -75)" fill="#fff" opacity="0.2"/>\n' +
                     '</svg>\n'],
                     smartSpeed: 500,
 
@@ -695,9 +695,9 @@ var ATBS = ATBS || {};
             })
         },
 
-        carousel_1i30m_no_reponsive: function() {
+        carousel_1i30m_no_reponsive: function () {
             var $carousels = $('.js-atbs-carousel-1i-30m-no-responsive');
-            $carousels.each( function() {
+            $carousels.each(function () {
                 $(this).owlCarousel({
                     items: 1,
                     margin: 30,
@@ -711,9 +711,9 @@ var ATBS = ATBS || {};
             })
         },
 
-        carousel_1i0m: function() {
+        carousel_1i0m: function () {
             var $carousels = $('.js-atbs-carousel-1i-0m');
-            $carousels.each( function() {
+            $carousels.each(function () {
                 $(this).owlCarousel({
                     items: 1,
                     margin: 0,
@@ -727,9 +727,9 @@ var ATBS = ATBS || {};
             })
         },
 
-        carousel_1i_get_src: function() {
+        carousel_1i_get_src: function () {
             var $carousels = $('.js-atbs-carousel-1i-get-src');
-            $carousels.each( function() {
+            $carousels.each(function () {
                 var carousel_loop = $(this).data('carousel-loop');
                 var carousel_margin = parseInt($(this).data('carousel-margin'));
                 $(this).owlCarousel({
@@ -741,26 +741,26 @@ var ATBS = ATBS || {};
                     autoHeight: true,
                     navText: ['<i class="mdicon mdicon-navigate_before"></i>', '<i class="mdicon mdicon-navigate_next"></i>'],
                     smartSpeed: 500,
-                    onInitialized  : owl_onInitialized,
+                    onInitialized: owl_onInitialized,
                 });
                 function owl_onInitialized(event) {
-                    var element             = event.target;
-                    var current             = event.item.index;
-                    var owl_background_img  = $(element).parents('.owl-carousel-wrap').find('.owl-background a img');
-                    var src                 = $(event.target).find(".owl-item").eq(current).find("img").attr('src');
+                    var element = event.target;
+                    var current = event.item.index;
+                    var owl_background_img = $(element).parents('.owl-carousel-wrap').find('.owl-background a img');
+                    var src = $(event.target).find(".owl-item").eq(current).find("img").attr('src');
 
                     $(owl_background_img).attr("src", src);
                 };
 
 
-                $(this).on('translate.owl.carousel', function(event) {
-                    var current                 = event.item.index;
-                    var owl_background_img      = $(this).parents('.owl-carousel-wrap').find('.owl-background a img');
-                    var owl_background_img_preparatory      = $(owl_background_img).not('.active');
-                    var src                     = $(event.target).find(".owl-item").eq(current).find("img").attr('src');
+                $(this).on('translate.owl.carousel', function (event) {
+                    var current = event.item.index;
+                    var owl_background_img = $(this).parents('.owl-carousel-wrap').find('.owl-background a img');
+                    var owl_background_img_preparatory = $(owl_background_img).not('.active');
+                    var src = $(event.target).find(".owl-item").eq(current).find("img").attr('src');
                     $(this).addClass("owl-disable-button");
                     $(owl_background_img_preparatory).attr('src', src);
-                    if ( $(owl_background_img_preparatory).attr('src') == src) {
+                    if ($(owl_background_img_preparatory).attr('src') == src) {
                         $(owl_background_img).toggleClass('active');
                     }
                     // $(owl_background_img_preparatory).imagesLoaded(function () {
@@ -768,20 +768,20 @@ var ATBS = ATBS || {};
                     // });
 
                 });
-                $(this).on('translated.owl.carousel', function(event) {
+                $(this).on('translated.owl.carousel', function (event) {
                     var owl_this = $(this);
 
                     setTimeout(function () {
                         $(owl_this).removeClass("owl-disable-button");
-                    },400)
+                    }, 400)
                 });
             })
         },
 
 
-        carousel_1i_get_src_multiple_margin: function() {
+        carousel_1i_get_src_multiple_margin: function () {
             var $carousels = $('.js-atbs-carousel-1i-get-src-multiple-margin');
-            $carousels.each( function() {
+            $carousels.each(function () {
                 var carousel_loop = $(this).data('carousel-loop');
                 var carousel_margin = parseInt($(this).data('carousel-margin'));
                 $(this).owlCarousel({
@@ -791,14 +791,14 @@ var ATBS = ATBS || {};
                     loop: carousel_loop,
                     autoHeight: true,
                     navText: ['<svg id="right-arrow-of-straight-thin-line" xmlns="http://www.w3.org/2000/svg" width="60" height="14.776" viewBox="0 0 60 14.776">\n' +
-                    '  <path data-name="Path 1493" d="M.478,172.8l11.14-6.432a.956.956,0,0,1,.956,1.656L4.522,172.67H59.044a.956.956,0,1,1,0,1.912H4.528l8.046,4.646a.956.956,0,1,1-.956,1.656L.478,174.453a.956.956,0,0,1,0-1.656Z" transform="translate(0 -166.237)" fill="#222"/>\n' +
-                    '</svg>\n', '<svg xmlns="http://www.w3.org/2000/svg" width="60" height="14.776" viewBox="0 0 60 14.776">\n' +
-                    '  <g id="right-arrow-of-straight-thin-line" transform="translate(20 -166.237)">\n' +
-                    '    <path data-name="Path 1493" d="M39.522,172.8l-11.14-6.432a.956.956,0,0,0-.956,1.656l8.053,4.649H-19.044a.956.956,0,0,0-.956.956.956.956,0,0,0,.956.956H35.472l-8.046,4.646a.956.956,0,1,0,.956,1.656l11.14-6.432a.956.956,0,0,0,0-1.656Z" transform="translate(0 0)" fill="#222"/>\n' +
-                    '  </g>\n' +
+                        '  <path data-name="Path 1493" d="M.478,172.8l11.14-6.432a.956.956,0,0,1,.956,1.656L4.522,172.67H59.044a.956.956,0,1,1,0,1.912H4.528l8.046,4.646a.956.956,0,1,1-.956,1.656L.478,174.453a.956.956,0,0,1,0-1.656Z" transform="translate(0 -166.237)" fill="#222"/>\n' +
+                        '</svg>\n', '<svg xmlns="http://www.w3.org/2000/svg" width="60" height="14.776" viewBox="0 0 60 14.776">\n' +
+                        '  <g id="right-arrow-of-straight-thin-line" transform="translate(20 -166.237)">\n' +
+                        '    <path data-name="Path 1493" d="M39.522,172.8l-11.14-6.432a.956.956,0,0,0-.956,1.656l8.053,4.649H-19.044a.956.956,0,0,0-.956.956.956.956,0,0,0,.956.956H35.472l-8.046,4.646a.956.956,0,1,0,.956,1.656l11.14-6.432a.956.956,0,0,0,0-1.656Z" transform="translate(0 0)" fill="#222"/>\n' +
+                        '  </g>\n' +
                     '</svg>\n'],
                     smartSpeed: 500,
-                    onInitialized  : owl_onInitialized,
+                    onInitialized: owl_onInitialized,
                     responsive: {
                         1200: {
                             margin: 85,
@@ -809,23 +809,23 @@ var ATBS = ATBS || {};
                     }
                 });
                 function owl_onInitialized(event) {
-                    var element             = event.target;
-                    var current             = event.item.index;
-                    var owl_background_img  = $(element).parents('.owl-carousel-wrap').find('.owl-background a img');
-                    var src                 = $(event.target).find(".owl-item").eq(current).find("img").attr('src');
+                    var element = event.target;
+                    var current = event.item.index;
+                    var owl_background_img = $(element).parents('.owl-carousel-wrap').find('.owl-background a img');
+                    var src = $(event.target).find(".owl-item").eq(current).find("img").attr('src');
 
                     $(owl_background_img).attr("src", src);
                 };
 
 
-                $(this).on('translate.owl.carousel', function(event) {
-                    var current                 = event.item.index;
-                    var owl_background_img      = $(this).parents('.owl-carousel-wrap').find('.owl-background a img');
-                    var owl_background_img_preparatory      = $(owl_background_img).not('.active');
-                    var src                     = $(event.target).find(".owl-item").eq(current).find("img").attr('src');
+                $(this).on('translate.owl.carousel', function (event) {
+                    var current = event.item.index;
+                    var owl_background_img = $(this).parents('.owl-carousel-wrap').find('.owl-background a img');
+                    var owl_background_img_preparatory = $(owl_background_img).not('.active');
+                    var src = $(event.target).find(".owl-item").eq(current).find("img").attr('src');
                     $(this).addClass("owl-disable-button");
                     $(owl_background_img_preparatory).attr('src', src);
-                    if ( $(owl_background_img_preparatory).attr('src') == src) {
+                    if ($(owl_background_img_preparatory).attr('src') == src) {
                         $(owl_background_img).toggleClass('active');
                     }
                     // $(owl_background_img_preparatory).imagesLoaded(function () {
@@ -833,19 +833,19 @@ var ATBS = ATBS || {};
                     // });
 
                 });
-                $(this).on('translated.owl.carousel', function(event) {
+                $(this).on('translated.owl.carousel', function (event) {
                     var owl_this = $(this);
 
                     setTimeout(function () {
                         $(owl_this).removeClass("owl-disable-button");
-                    },400)
+                    }, 400)
                 });
             })
         },
 
-        carousel_1i_get_src_width_auto: function() {
+        carousel_1i_get_src_width_auto: function () {
             var $carousels = $('.js-atbs-carousel-1i-get-src-width-auto');
-            $carousels.each( function() {
+            $carousels.each(function () {
                 var carousel_loop = $(this).data('carousel-loop');
                 var carousel_margin = parseInt($(this).data('carousel-margin'));
                 $(this).owlCarousel({
@@ -872,26 +872,26 @@ var ATBS = ATBS || {};
                             margin: carousel_margin,
                         }
                     },
-                    onInitialized  : owl_onInitialized,
+                    onInitialized: owl_onInitialized,
                 });
                 function owl_onInitialized(event) {
-                    var element             = event.target;
-                    var current             = event.item.index;
-                    var owl_background_img  = $(element).parents('.owl-carousel-wrap').find('.owl-background a img');
-                    var src                 = $(event.target).find(".owl-item").eq(current).find("img").attr('src');
+                    var element = event.target;
+                    var current = event.item.index;
+                    var owl_background_img = $(element).parents('.owl-carousel-wrap').find('.owl-background a img');
+                    var src = $(event.target).find(".owl-item").eq(current).find("img").attr('src');
 
                     $(owl_background_img).attr("src", src);
                 };
 
 
-                $(this).on('translate.owl.carousel', function(event) {
-                    var current                 = event.item.index;
-                    var owl_background_img      = $(this).parents('.owl-carousel-wrap').find('.owl-background a img');
-                    var owl_background_img_preparatory      = $(owl_background_img).not('.active');
-                    var src                     = $(event.target).find(".owl-item").eq(current).find("img").attr('src');
+                $(this).on('translate.owl.carousel', function (event) {
+                    var current = event.item.index;
+                    var owl_background_img = $(this).parents('.owl-carousel-wrap').find('.owl-background a img');
+                    var owl_background_img_preparatory = $(owl_background_img).not('.active');
+                    var src = $(event.target).find(".owl-item").eq(current).find("img").attr('src');
                     $(this).addClass("owl-disable-button");
                     $(owl_background_img_preparatory).attr('src', src);
-                    if ( $(owl_background_img_preparatory).attr('src') == src) {
+                    if ($(owl_background_img_preparatory).attr('src') == src) {
                         $(owl_background_img).toggleClass('active');
                     }
                     // $(owl_background_img_preparatory).imagesLoaded(function () {
@@ -899,19 +899,19 @@ var ATBS = ATBS || {};
                     // });
 
                 });
-                $(this).on('translated.owl.carousel', function(event) {
+                $(this).on('translated.owl.carousel', function (event) {
                     var owl_this = $(this);
 
                     setTimeout(function () {
                         $(owl_this).removeClass("owl-disable-button");
-                    },400)
+                    }, 400)
                 });
             })
         },
 
-        carousel_1i_get_src_width_auto_0m: function() {
+        carousel_1i_get_src_width_auto_0m: function () {
             var $carousels = $('.js-atbs-carousel-1i-get-src-width-auto-0m');
-            $carousels.each( function() {
+            $carousels.each(function () {
                 var carousel_loop = $(this).data('carousel-loop');
                 var carousel_margin = parseInt($(this).data('carousel-margin'));
                 $(this).owlCarousel({
@@ -924,18 +924,18 @@ var ATBS = ATBS || {};
                     autoWidth: true,
                     navText: ['<i class="mdicon mdicon-navigate_before"></i>', '<i class="mdicon mdicon-navigate_next"></i>'],
                     smartSpeed: 500,
-                    onInitialized  : owl_onInitialized,
+                    onInitialized: owl_onInitialized,
                 });
                 function owl_onInitialized(event) {
-                    var element             = event.target;
-                    var current             = event.item.index;
-                    var owl_background_img  = $(element).parents('.owl-carousel-wrap').find('.owl-background a img');
-                    var src                 = $(event.target).find(".owl-item").eq(current).find("img").attr('src');
+                    var element = event.target;
+                    var current = event.item.index;
+                    var owl_background_img = $(element).parents('.owl-carousel-wrap').find('.owl-background a img');
+                    var src = $(event.target).find(".owl-item").eq(current).find("img").attr('src');
                     // Animation Class
-                    var owl_items                   = $(element).find(".owl-item");
-                    var current_center              = $(element).find(".owl-item").eq(current);
-                    var current_center_index        = $(element).find(".owl-item").eq(current).index();
-                    var current_center_active       = owl_items[current_center_index];
+                    var owl_items = $(element).find(".owl-item");
+                    var current_center = $(element).find(".owl-item").eq(current);
+                    var current_center_index = $(element).find(".owl-item").eq(current).index();
+                    var current_center_active = owl_items[current_center_index];
 
                     // Action
                     $(owl_background_img).attr("src", src);
@@ -943,26 +943,26 @@ var ATBS = ATBS || {};
                     $(current_center).addClass("Animation-Preventive");
                     setTimeout(function () {
                         $(current_center_active).addClass("active_current");
-                    },100);
+                    }, 100);
                 };
 
-                $(this).on('translate.owl.carousel', function(event) {
-                    var element                 = event.target;
-                    var current                 = event.item.index;
-                    var owl_background_img      = $(this).parents('.owl-carousel-wrap').find('.owl-background a img');
-                    var owl_background_img_preparatory      = $(owl_background_img).not('.active');
-                    var src                     = $(event.target).find(".owl-item").eq(current).find("img").attr('src');
+                $(this).on('translate.owl.carousel', function (event) {
+                    var element = event.target;
+                    var current = event.item.index;
+                    var owl_background_img = $(this).parents('.owl-carousel-wrap').find('.owl-background a img');
+                    var owl_background_img_preparatory = $(owl_background_img).not('.active');
+                    var src = $(event.target).find(".owl-item").eq(current).find("img").attr('src');
                     // Animation Class
-                    var current_center         = $(element).find(".owl-item").eq(current);
-                    var owl_items              = $(element).find(".owl-item");
-                    var owl_item_remove_class  = $(element).find(".owl-item.active_current");
-                    var current_center_index   = $(element).find(".owl-item").eq(current).index();
-                    var current_center_active  = owl_items[current_center_index];
+                    var current_center = $(element).find(".owl-item").eq(current);
+                    var owl_items = $(element).find(".owl-item");
+                    var owl_item_remove_class = $(element).find(".owl-item.active_current");
+                    var current_center_index = $(element).find(".owl-item").eq(current).index();
+                    var current_center_active = owl_items[current_center_index];
 
                     // Action
                     $(this).addClass("owl-disable-button");
                     $(owl_background_img_preparatory).attr('src', src);
-                    if ( $(owl_background_img_preparatory).attr('src') == src) {
+                    if ($(owl_background_img_preparatory).attr('src') == src) {
                         $(owl_background_img).toggleClass('active');
                     }
                     // $(owl_background_img_preparatory).imagesLoaded(function () {
@@ -974,24 +974,24 @@ var ATBS = ATBS || {};
                         $(owl_item_remove_class).removeClass("active_current Animation-Preventive");
                         $(current_center).addClass("Animation-Preventive");
                         $(current_center_active).addClass("active_current");
-                    },100);
+                    }, 100);
 
 
                 });
 
-                $(this).on('translated.owl.carousel', function(event) {
+                $(this).on('translated.owl.carousel', function (event) {
                     var owl_this = $(this);
 
                     setTimeout(function () {
                         $(owl_this).removeClass("owl-disable-button");
-                    },400)
+                    }, 400)
                 });
             })
         },
 
-        carousel_1i_get_src_width_auto_center: function() {
+        carousel_1i_get_src_width_auto_center: function () {
             var $carousels = $('.js-atbs-carousel-1i-get-src-width-auto-center');
-            $carousels.each( function() {
+            $carousels.each(function () {
                 var carousel_loop = $(this).data('carousel-loop');
                 var carousel_margin = parseInt($(this).data('carousel-margin'));
                 $(this).owlCarousel({
@@ -1006,7 +1006,7 @@ var ATBS = ATBS || {};
 
                     navText: ['<i class="mdicon mdicon-navigate_before"></i>', '<i class="mdicon mdicon-navigate_next"></i>'],
                     smartSpeed: 800,
-                    onInitialized  : owl_onInitialized,
+                    onInitialized: owl_onInitialized,
                     responsive: {
                         0: {
                             margin: 30,
@@ -1035,15 +1035,15 @@ var ATBS = ATBS || {};
 
                 });
                 function owl_onInitialized(event) {
-                    var element             = event.target;
-                    var current             = event.item.index;
-                    var owl_background_img  = $(element).parents('.owl-carousel-wrap').find('.owl-background a img');
-                    var src                 = $(event.target).find(".owl-item").eq(current).find("img").attr('src');
+                    var element = event.target;
+                    var current = event.item.index;
+                    var owl_background_img = $(element).parents('.owl-carousel-wrap').find('.owl-background a img');
+                    var src = $(event.target).find(".owl-item").eq(current).find("img").attr('src');
                     // Animation Class
-                    var owl_items                   = $(element).find(".owl-item");
-                    var current_center              = $(element).find(".owl-item").eq(current);
-                    var current_center_index        = $(element).find(".owl-item").eq(current).index();
-                    var current_center_active       = owl_items[current_center_index];
+                    var owl_items = $(element).find(".owl-item");
+                    var current_center = $(element).find(".owl-item").eq(current);
+                    var current_center_index = $(element).find(".owl-item").eq(current).index();
+                    var current_center_active = owl_items[current_center_index];
                     // Action
 
                     $(owl_background_img).attr("src", src);
@@ -1051,25 +1051,25 @@ var ATBS = ATBS || {};
                     $(current_center).addClass("Animation-Preventive");
                     setTimeout(function () {
                         $(current_center_active).addClass("active_current");
-                    },100);
+                    }, 100);
                 };
-                $(this).on('translate.owl.carousel', function(event) {
-                    var element                 = event.target;
-                    var current                 = event.item.index;
-                    var owl_background_img      = $(this).parents('.owl-carousel-wrap').find('.owl-background a img');
-                    var owl_background_img_preparatory      = $(owl_background_img).not('.active');
-                    var src                     = $(event.target).find(".owl-item").eq(current).find("img").attr('src');
+                $(this).on('translate.owl.carousel', function (event) {
+                    var element = event.target;
+                    var current = event.item.index;
+                    var owl_background_img = $(this).parents('.owl-carousel-wrap').find('.owl-background a img');
+                    var owl_background_img_preparatory = $(owl_background_img).not('.active');
+                    var src = $(event.target).find(".owl-item").eq(current).find("img").attr('src');
                     // Animation Class
-                    var current_center         = $(element).find(".owl-item").eq(current);
-                    var owl_items              = $(element).find(".owl-item");
-                    var owl_item_remove_class  = $(element).find(".owl-item.active_current");
-                    var current_center_index   = $(element).find(".owl-item").eq(current).index();
-                    var current_center_active  = owl_items[current_center_index];
+                    var current_center = $(element).find(".owl-item").eq(current);
+                    var owl_items = $(element).find(".owl-item");
+                    var owl_item_remove_class = $(element).find(".owl-item.active_current");
+                    var current_center_index = $(element).find(".owl-item").eq(current).index();
+                    var current_center_active = owl_items[current_center_index];
 
                     // Action
                     $(this).addClass("owl-disable-button");
                     $(owl_background_img_preparatory).attr('src', src);
-                    if ( $(owl_background_img_preparatory).attr('src') == src) {
+                    if ($(owl_background_img_preparatory).attr('src') == src) {
                         $(owl_background_img).toggleClass('active');
                     }
 
@@ -1078,29 +1078,29 @@ var ATBS = ATBS || {};
                         $(owl_item_remove_class).removeClass("active_current Animation-Preventive");
                         $(current_center).addClass("Animation-Preventive");
                         $(current_center_active).addClass("active_current");
-                    },100);
+                    }, 100);
 
                 });
-                $(this).on('translated.owl.carousel', function(event) {
+                $(this).on('translated.owl.carousel', function (event) {
                     var owl_this = $(this);
 
                     setTimeout(function () {
                         $(owl_this).removeClass("owl-disable-button");
-                    },400)
+                    }, 400)
                 });
             })
         },
 
-        carousel_hover_cursor_effect: function() {
-            if ( $.isFunction($.fn.owlCarousel) ) {
+        carousel_hover_cursor_effect: function () {
+            if ($.isFunction($.fn.owlCarousel)) {
                 var $carousels = $('.js-atbs-carousel-hover-cursor-effect');
-                $carousels.each( function() {
+                $carousels.each(function () {
                     var element = $(this);
                     element.hover(function () {
                         element.addClass("on-hover");
                         var item = element.find('.owl-item .post');
                         // Append Cursor Element
-                        var cursor =    '<div class="owl-cursor">' +
+                        var cursor = '<div class="owl-cursor">' +
                             '<svg viewBox="0 0 512 512" xml:space="preserve">' +
                             ' <path xmlns="http://www.w3.org/2000/svg" d="M508.875,248.458l-160-160c-4.167-4.167-10.917-4.167-15.083,0c-4.167,4.167-4.167,10.917,0,15.083l141.792,141.792    H10.667C4.771,245.333,0,250.104,0,256s4.771,10.667,10.667,10.667h464.917L333.792,408.458c-4.167,4.167-4.167,10.917,0,15.083    c2.083,2.083,4.813,3.125,7.542,3.125c2.729,0,5.458-1.042,7.542-3.125l160-160C513.042,259.375,513.042,252.625,508.875,248.458z    "/>' +
                             '</svg>' +
@@ -1110,14 +1110,14 @@ var ATBS = ATBS || {};
                         // Action
                         item.hover(function () {
                             element.removeClass("show-cursor");
-                        },function () {
+                        }, function () {
                             element.addClass("show-cursor");
                         });
-                        $(this).on('mousemove',function (e) {
+                        $(this).on('mousemove', function (e) {
                             var offset = $(element).offset();
                             var x = e.pageX - offset.left;
                             var y = e.pageY - offset.top;
-                            $('.owl-cursor').css({left: x, top: y});
+                            $('.owl-cursor').css({ left: x, top: y });
 
                             if ((e.pageX - this.offsetLeft) < $(this).width() / 2) {
                                 element.addClass("Left");
@@ -1133,9 +1133,9 @@ var ATBS = ATBS || {};
                         var owl_cursor = element.find('.owl-cursor');
                         owl_cursor.remove();
                     });
-                    element.on('click',function () {
-                        if ( $(this).hasClass("show-cursor") ) {
-                            if( $(this).hasClass("Left")) {
+                    element.on('click', function () {
+                        if ($(this).hasClass("show-cursor")) {
+                            if ($(this).hasClass("Left")) {
                                 element.trigger('prev.owl.carousel');
                             }
                             else {
@@ -1150,9 +1150,9 @@ var ATBS = ATBS || {};
             }
         },
 
-        carousel_1i40m: function() {
+        carousel_1i40m: function () {
             var $carousels = $('.js-atbs-carousel-1i-40m');
-            $carousels.each( function() {
+            $carousels.each(function () {
                 $(this).owlCarousel({
                     items: 1,
                     margin: 30,
@@ -1166,9 +1166,9 @@ var ATBS = ATBS || {};
             })
         },
 
-        carousel_1i_text_fade: function() {
+        carousel_1i_text_fade: function () {
             var $carousels = $('.js-atbs-carousel-1i-text-fade');
-            $carousels.each( function() {
+            $carousels.each(function () {
                 $(this).owlCarousel({
                     items: 1,
                     margin: 0,
@@ -1197,9 +1197,9 @@ var ATBS = ATBS || {};
             })
         },
 
-        carousel_1i_dot_number_effect: function() {
+        carousel_1i_dot_number_effect: function () {
             var $carousels = $('.js-atbs-carousel-1i-dot-number-effect');
-            $carousels.each( function() {
+            $carousels.each(function () {
                 var carousel_loop = $(this).data('carousel-loop');
                 $(this).owlCarousel({
                     items: 1,
@@ -1210,31 +1210,31 @@ var ATBS = ATBS || {};
                     autoHeight: true,
                     navText: ['<i class="mdicon mdicon-navigate_before"></i>', '<i class="mdicon mdicon-navigate_next"></i>'],
                     smartSpeed: 600,
-                    onInitialized  : counter,
-                    onTranslate : counter,
+                    onInitialized: counter,
+                    onTranslate: counter,
                 });
                 function counter(event) {
-                    var element			= event.target;
-                    var itemCount		= event.item.count;
-                    var itenIndex		= event.item.index;
+                    var element = event.target;
+                    var itemCount = event.item.count;
+                    var itenIndex = event.item.index;
                     var owlstageChildrens = $(element).find('.owl-stage').children().length;
 
-                    var theCloned 		= owlstageChildrens - itemCount;
+                    var theCloned = owlstageChildrens - itemCount;
                     var currentIndex = itenIndex - parseInt(theCloned / 2) + 1;
-                    if(itenIndex < parseInt(theCloned / 2)) {
+                    if (itenIndex < parseInt(theCloned / 2)) {
                         currentIndex = owlstageChildrens - theCloned;
-                    }else if(currentIndex > itemCount) {
+                    } else if (currentIndex > itemCount) {
                         currentIndex = currentIndex - itemCount;
                     }
 
-                    $(element).parent().find('.owl-number').html( currentIndex +' <span class="slide-seperated">/</span> ' + itemCount);
+                    $(element).parent().find('.owl-number').html(currentIndex + ' <span class="slide-seperated">/</span> ' + itemCount);
                 }
             })
         },
 
-        carousel_2i30m: function() {
+        carousel_2i30m: function () {
             var $carousels = $('.js-atbs-carousel-2i-30m');
-            $carousels.each( function() {
+            $carousels.each(function () {
                 $(this).owlCarousel({
                     items: 2,
                     margin: 30,
@@ -1256,9 +1256,9 @@ var ATBS = ATBS || {};
             })
         },
 
-        carousel_3i0m: function() {
+        carousel_3i0m: function () {
             var $carousels = $('.js-carousel-3i0m');
-            $carousels.each( function() {
+            $carousels.each(function () {
                 $(this).owlCarousel({
                     items: 3,
                     margin: 0,
@@ -1268,18 +1268,18 @@ var ATBS = ATBS || {};
                     smartSpeed: 500,
                     navText: ['<i class="mdicon mdicon-navigate_before"></i>', '<i class="mdicon mdicon-navigate_next"></i>'],
                     responsive: {
-                        0 : {
+                        0: {
                             items: 1,
                             dots: true,
                             nav: false,
                         },
-                        576 : {
+                        576: {
                             items: 1,
                         },
-                        768 : {
+                        768: {
                             items: 2,
                         },
-                        1200 : {
+                        1200: {
                             items: 3,
                         },
                     },
@@ -1287,9 +1287,9 @@ var ATBS = ATBS || {};
             })
         },
 
-        carousel_4i0m: function() {
+        carousel_4i0m: function () {
             var $carousels = $('.js-atbs-carousel-4i-0m');
-            $carousels.each( function() {
+            $carousels.each(function () {
                 var carousel_loop = $(this).data('carousel-loop');
                 $(this).owlCarousel({
                     items: 4,
@@ -1304,28 +1304,28 @@ var ATBS = ATBS || {};
                         0: {
                             items: 1,
                         },
-                        481 : {
+                        481: {
                             items: 2,
                         },
-                        768 : {
+                        768: {
                             items: 3,
                         },
-                        992 : {
+                        992: {
                             items: 3,
                         },
-                        1200 : {
+                        1200: {
                             items: 4,
                         },
-                        1921 : {
+                        1921: {
                             items: 6,
                         }
                     },
                 });
             })
         },
-        carousel_4i30m: function() {
+        carousel_4i30m: function () {
             var $carousels = $('.js-atbs-carousel-4i30m');
-            $carousels.each( function() {
+            $carousels.each(function () {
                 var carousel_loop = $(this).data('carousel-loop');
                 var carousel_loop = $(this).data('carousel-loop');
                 $(this).owlCarousel({
@@ -1341,25 +1341,25 @@ var ATBS = ATBS || {};
                         0: {
                             items: 1,
                         },
-                        576 : {
+                        576: {
                             items: 2,
                         },
-                        992 : {
+                        992: {
                             items: 3,
                         },
-                        1200 : {
+                        1200: {
                             items: 3,
                         },
-                        1546 : {
+                        1546: {
                             items: 4,
                         }
                     },
                 });
             })
         },
-        carousel_auto_width: function() {
+        carousel_auto_width: function () {
             var $carousels = $('.js-atbs-carousel-auto-width');
-            $carousels.each( function() {
+            $carousels.each(function () {
                 var carousel_loop = $(this).data('carousel-loop');
                 var carousel_margin = parseInt($(this).data('carousel-margin'));
                 $(this).owlCarousel({
@@ -1379,7 +1379,7 @@ var ATBS = ATBS || {};
                         0: {
                             margin: 15,
                         },
-                        481 : {
+                        481: {
                             margin: carousel_margin,
                         }
                     },
@@ -1387,9 +1387,9 @@ var ATBS = ATBS || {};
             })
         },
 
-        carousel_auto_width_rtl: function() {
+        carousel_auto_width_rtl: function () {
             var $carousels = $('.js-atbs-carousel-auto-width-rtl');
-            $carousels.each( function() {
+            $carousels.each(function () {
                 var carousel_loop = $(this).data('carousel-loop');
                 var carousel_margin = parseInt($(this).data('carousel-margin'));
                 $(this).owlCarousel({
@@ -1417,9 +1417,9 @@ var ATBS = ATBS || {};
             })
         },
 
-        carousel_auto_width_delay: function() {
+        carousel_auto_width_delay: function () {
             var $carousels = $('.js-atbs-carousel-auto-width-delay');
-            $carousels.each( function() {
+            $carousels.each(function () {
                 var carousel_loop = $(this).data('carousel-loop');
                 var carousel_margin = parseInt($(this).data('carousel-margin'));
                 $(this).owlCarousel({
@@ -1431,52 +1431,52 @@ var ATBS = ATBS || {};
                     autoWidth: true,
                     navText: ['<i class="mdicon mdicon-navigate_before"></i>', '<i class="mdicon mdicon-navigate_next"></i>'],
                     smartSpeed: 800,
-                    onInitialized  : owl_onInitialized,
+                    onInitialized: owl_onInitialized,
                     responsive: {
                         0: {
                             margin: 15,
                         },
-                        481 : {
+                        481: {
                             margin: carousel_margin,
                         }
                     },
                 });
                 function owl_onInitialized(event) {
-                    var element                     = event.target;
-                    var current                     = event.item.index;
-                    var owl_items                   = $(element).find(".owl-item");
-                    var current_center              = $(element).find(".owl-item").eq(current);
-                    var current_center_index        = $(element).find(".owl-item").eq(current).index();
-                    var current_center_active       = owl_items[current_center_index];
+                    var element = event.target;
+                    var current = event.item.index;
+                    var owl_items = $(element).find(".owl-item");
+                    var current_center = $(element).find(".owl-item").eq(current);
+                    var current_center_index = $(element).find(".owl-item").eq(current).index();
+                    var current_center_active = owl_items[current_center_index];
 
                     /*Action*/
                     $(current_center).addClass("Animation-Preventive");
                     setTimeout(function () {
                         $(current_center_active).addClass("active_current");
-                    },100);
+                    }, 100);
                 };
-                $(this).on('translate.owl.carousel', function(event) {
-                    var element                = event.target;
-                    var current                = event.item.index;
-                    var current_center         = $(element).find(".owl-item").eq(current);
-                    var owl_items              = $(element).find(".owl-item");
-                    var owl_item_remove_class  = $(element).find(".owl-item.active_current");
-                    var current_center_index   = $(element).find(".owl-item").eq(current).index();
-                    var current_center_active  = owl_items[current_center_index];
+                $(this).on('translate.owl.carousel', function (event) {
+                    var element = event.target;
+                    var current = event.item.index;
+                    var current_center = $(element).find(".owl-item").eq(current);
+                    var owl_items = $(element).find(".owl-item");
+                    var owl_item_remove_class = $(element).find(".owl-item.active_current");
+                    var current_center_index = $(element).find(".owl-item").eq(current).index();
+                    var current_center_active = owl_items[current_center_index];
                     /*Action*/
                     setTimeout(function () {
                         $(owl_item_remove_class).removeClass("active_current Animation-Preventive");
                         $(current_center).addClass("Animation-Preventive");
                         $(current_center_active).addClass("active_current");
-                    },100);
+                    }, 100);
                 });
 
             })
         },
 
-        carousel_auto_width_center: function() {
+        carousel_auto_width_center: function () {
             var $carousels = $('.js-atbs-carousel-auto-width-center');
-            $carousels.each( function() {
+            $carousels.each(function () {
                 var carousel_loop = $(this).data('carousel-loop');
                 var carousel_margin = parseInt($(this).data('carousel-margin'));
                 $(this).owlCarousel({
@@ -1489,7 +1489,7 @@ var ATBS = ATBS || {};
                     center: true,
                     navText: ['<i class="mdicon mdicon-navigate_before"></i>', '<i class="mdicon mdicon-navigate_next"></i>'],
                     smartSpeed: 800,
-                    onInitialized  : owl_onInitialized,
+                    onInitialized: owl_onInitialized,
                     responsive: {
                         0: {
                             margin: 30,
@@ -1507,33 +1507,33 @@ var ATBS = ATBS || {};
                     },
                 });
                 function owl_onInitialized(event) {
-                    var element                     = event.target;
-                    var current                     = event.item.index;
-                    var owl_items                   = $(element).find(".owl-item");
-                    var current_center              = $(element).find(".owl-item").eq(current);
-                    var current_center_index        = $(element).find(".owl-item").eq(current).index();
-                    var current_center_active       = owl_items[current_center_index];
+                    var element = event.target;
+                    var current = event.item.index;
+                    var owl_items = $(element).find(".owl-item");
+                    var current_center = $(element).find(".owl-item").eq(current);
+                    var current_center_index = $(element).find(".owl-item").eq(current).index();
+                    var current_center_active = owl_items[current_center_index];
 
                     /*Action*/
                     $(current_center).addClass("Animation-Preventive");
                     setTimeout(function () {
                         $(current_center_active).addClass("active_current");
-                    },100);
+                    }, 100);
                 };
-                $(this).on('translate.owl.carousel', function(event) {
-                    var element                = event.target;
-                    var current                = event.item.index;
-                    var current_center         = $(element).find(".owl-item").eq(current);
-                    var owl_items              = $(element).find(".owl-item");
-                    var owl_item_remove_class  = $(element).find(".owl-item.active_current");
-                    var current_center_index   = $(element).find(".owl-item").eq(current).index();
-                    var current_center_active  = owl_items[current_center_index];
+                $(this).on('translate.owl.carousel', function (event) {
+                    var element = event.target;
+                    var current = event.item.index;
+                    var current_center = $(element).find(".owl-item").eq(current);
+                    var owl_items = $(element).find(".owl-item");
+                    var owl_item_remove_class = $(element).find(".owl-item.active_current");
+                    var current_center_index = $(element).find(".owl-item").eq(current).index();
+                    var current_center_active = owl_items[current_center_index];
                     /*Action*/
                     setTimeout(function () {
                         $(owl_item_remove_class).removeClass("active_current Animation-Preventive");
                         $(current_center).addClass("Animation-Preventive");
                         $(current_center_active).addClass("active_current");
-                    },100);
+                    }, 100);
                 });
                 // $(this).on('translate.owl.carousel', function(event) {
                 //     var current                = event.item.index;
@@ -1554,9 +1554,9 @@ var ATBS = ATBS || {};
             })
         },
 
-        carousel_background_below: function() {
+        carousel_background_below: function () {
             var $carousels = $('.js-atbs-carousel-background-below');
-            $carousels.each( function() {
+            $carousels.each(function () {
                 var carousel_loop = $(this).data('carousel-loop');
                 var carousel_margin = parseInt($(this).data('carousel-margin'));
                 $(this).owlCarousel({
@@ -1567,51 +1567,51 @@ var ATBS = ATBS || {};
                     loop: carousel_loop,
                     navText: ['<i class="mdicon mdicon-navigate_before"></i>', '<i class="mdicon mdicon-navigate_next"></i>'],
                     smartSpeed: 600,
-                    onInitialized  : owl_onInitialized,
+                    onInitialized: owl_onInitialized,
                     responsive: {
                         0: {
                             margin: 15,
                         },
-                        481 : {
+                        481: {
                             margin: carousel_margin,
                         }
                     },
                 });
 
                 function owl_onInitialized(event) {
-                    var element             = event.target;
-                    var current             = event.item.index;
-                    var owl_background_img  = $(element).parents('.owl-carousel-wrap').find('.owl-background a img');
-                    var src                 = $(event.target).find(".owl-item").eq(current).find("img").attr('src');
+                    var element = event.target;
+                    var current = event.item.index;
+                    var owl_background_img = $(element).parents('.owl-carousel-wrap').find('.owl-background a img');
+                    var src = $(event.target).find(".owl-item").eq(current).find("img").attr('src');
 
                     $(owl_background_img).attr("src", src);
                 };
-                $(this).on('translate.owl.carousel', function(event) {
-                    var current                 = event.item.index;
-                    var owl_background_img      = $(this).parents('.owl-carousel-wrap').find('.owl-background a img');
-                    var src                     = $(event.target).find(".owl-item").eq(current).find("img").attr('src');
+                $(this).on('translate.owl.carousel', function (event) {
+                    var current = event.item.index;
+                    var owl_background_img = $(this).parents('.owl-carousel-wrap').find('.owl-background a img');
+                    var src = $(event.target).find(".owl-item").eq(current).find("img").attr('src');
 
                     $(this).addClass("owl-disable-button");
-                    $(owl_background_img).fadeOut(600, function() {
+                    $(owl_background_img).fadeOut(600, function () {
                         $(owl_background_img).attr("src", src);
                     }).fadeIn(600);
                 });
-                $(this).on('translated.owl.carousel', function(event) {
+                $(this).on('translated.owl.carousel', function (event) {
                     var owl_this = $(this);
 
                     setTimeout(function () {
                         $(owl_this).removeClass("owl-disable-button");
-                    },400)
+                    }, 400)
                 });
 
             })
         },
 
-        carousel_1i_dot_center_number: function() {
+        carousel_1i_dot_center_number: function () {
             var $carousels = $('.js-atbs-carousel-1i-dot-center-number');
-            $carousels.each( function() {
+            $carousels.each(function () {
                 var $this = $(this);
-                var carousel_button_space =  $(this).data('carousel-button-space');
+                var carousel_button_space = $(this).data('carousel-button-space');
                 $(this).owlCarousel({
                     items: 1,
                     margin: 30,
@@ -1619,17 +1619,17 @@ var ATBS = ATBS || {};
                     loop: true,
                     dots: true,
                     lazyLoad: true,
-                    smartSpeed:450,
+                    smartSpeed: 450,
                     navText: ['<i class="mdicon mdicon-chevron-thin-left"></i>', '<i class="mdicon mdicon-chevron-thin-right"></i>'],
                     responsive: {
-                        0 : {
+                        0: {
                             items: 1,
                             margin: 30,
                         },
-                        576 : {
+                        576: {
                             items: 2,
                         },
-                        992 : {
+                        992: {
                             items: 1,
                         },
                     },
@@ -1637,7 +1637,7 @@ var ATBS = ATBS || {};
                 });
 
                 SetButtonNavDot($(this));
-                $(window).on('resize' , function () {
+                $(window).on('resize', function () {
                     SetButtonNavDot($this);
                 });
                 function SetButtonNavDot(event) {
@@ -1646,62 +1646,62 @@ var ATBS = ATBS || {};
                     var width_dots = parseFloat(event.find('.owl-dots').css('width'));
                     var spacing_x_owl_dots = width_button + carousel_button_space;
                     // var spacing_owl_next =  width_button + carousel_button_space + width_dots;
-                    var spacing_owl_next =  carousel_button_space + width_dots + carousel_button_space ;
+                    var spacing_owl_next = carousel_button_space + width_dots + carousel_button_space;
                     // set y
                     var height_button = parseFloat(event.find('.owl-nav .owl-next').css('height'));
                     var height_dots = parseFloat(event.find('.owl-dots').css('height'));
-                    var spacing_y_owl_dots =parseFloat( height_button / 2 - height_dots / 2 ) ;
-                    if(   window.matchMedia("(max-width: 768px)").matches ){
+                    var spacing_y_owl_dots = parseFloat(height_button / 2 - height_dots / 2);
+                    if (window.matchMedia("(max-width: 768px)").matches) {
                         width_button = parseFloat(event.find('.owl-nav .owl-next').css('width'));
                         width_dots = parseFloat(event.find('.owl-dots').css('width'));
                         spacing_x_owl_dots = width_button + 15;
                         // spacing_owl_next =  width_button + 15 + width_dots + 15;
-                        spacing_owl_next =   15 + width_dots + 15;
+                        spacing_owl_next = 15 + width_dots + 15;
 
                         height_button = parseFloat(event.find('.owl-nav .owl-next').css('height'));
                         height_dots = parseFloat(event.find('.owl-dots').css('height'));
-                        spacing_y_owl_dots =parseFloat( height_button / 2 - height_dots / 2 ) ;
+                        spacing_y_owl_dots = parseFloat(height_button / 2 - height_dots / 2);
                     }
-                    if(event.hasClass("dots-position-right")) {
-                        event.find('.owl-dots').css({"right": spacing_x_owl_dots});
+                    if (event.hasClass("dots-position-right")) {
+                        event.find('.owl-dots').css({ "right": spacing_x_owl_dots });
                     }
                     else {
-                        event.find('.owl-dots').css({"left": spacing_x_owl_dots});
+                        event.find('.owl-dots').css({ "left": spacing_x_owl_dots });
                     }
-                    event.find('.owl-dots').css({"bottom": spacing_y_owl_dots});
-                    event.find('.owl-nav .owl-next').css({"margin-left": spacing_owl_next});
+                    event.find('.owl-dots').css({ "bottom": spacing_y_owl_dots });
+                    event.find('.owl-nav .owl-next').css({ "margin-left": spacing_owl_next });
                     console.log(spacing_owl_next);
                 }
             });
         },
 
-        customCarouselNav: function() {
-            if ( $.isFunction($.fn.owlCarousel) ) {
+        customCarouselNav: function () {
+            if ($.isFunction($.fn.owlCarousel)) {
                 var $carouselNexts = $('.js-carousel-next');
-                $carouselNexts.each( function() {
+                $carouselNexts.each(function () {
                     var carouselNext = $(this);
                     var carouselID = carouselNext.parent('.atbs-carousel-nav-custom-holder').attr('data-carouselID');
                     var $carousel = $('#' + carouselID);
 
-                    carouselNext.on('click', function() {
+                    carouselNext.on('click', function () {
                         $carousel.trigger('next.owl.carousel');
                     });
                 });
 
                 var $carouselPrevs = $('.js-carousel-prev');
-                $carouselPrevs.each( function() {
+                $carouselPrevs.each(function () {
                     var carouselPrev = $(this);
                     var carouselID = carouselPrev.parent('.atbs-carousel-nav-custom-holder').attr('data-carouselID');
                     var $carousel = $('#' + carouselID);
 
-                    carouselPrev.on('click', function() {
+                    carouselPrev.on('click', function () {
                         $carousel.trigger('prev.owl.carousel');
                     });
                 });
             }
         },
 
-        atbs_scroll_element: function() {
+        atbs_scroll_element: function () {
             $(function () {
                 // Define window variables
                 var winScrollTop = $(window).scrollTop();
@@ -1918,7 +1918,7 @@ var ATBS = ATBS || {};
                 }
 
                 //
-                $(window).on('scroll', function(){
+                $(window).on('scroll', function () {
 
                     // Get window scroll top.
                     winScrollTop = $(window).scrollTop();
@@ -1950,28 +1950,28 @@ var ATBS = ATBS || {};
 
                 function calcDots_Nav() {
                     var offset_left = $(dots).get(0).getBoundingClientRect().left - $(el_current).get(0).getBoundingClientRect().left;
-                    var offset_right = offset_left + $(dots).get(0).getBoundingClientRect().width * $(dots_count).length ;
-                    $(nav_prev).css({"left": offset_left + "px"});
-                    $(nav_next).css({"left": offset_right + "px", "right": "auto"});
-                    console.log(  $(dots_count).length);
+                    var offset_right = offset_left + $(dots).get(0).getBoundingClientRect().width * $(dots_count).length;
+                    $(nav_prev).css({ "left": offset_left + "px" });
+                    $(nav_next).css({ "left": offset_right + "px", "right": "auto" });
+                    console.log($(dots_count).length);
                 }
                 calcDots_Nav();
-                $(window).on("resize",function () {
+                $(window).on("resize", function () {
                     calcDots_Nav();
                 })
             });
         },
 
         /* ============================================================================
-	     * Sticky sidebar
-	     * ==========================================================================*/
-        stickySidebar: function() {
-            setTimeout(function() {
+         * Sticky sidebar
+         * ==========================================================================*/
+        stickySidebar: function () {
+            setTimeout(function () {
                 var $stickySidebar = $('.js-sticky-sidebar');
                 var $stickyHeader = $('.js-sticky-header');
 
                 var marginTop = ($stickyHeader.length) ? ($stickyHeader.outerHeight() + 20) : 0; // check if there's sticky header
-                if ( $.isFunction($.fn.theiaStickySidebar) ) {
+                if ($.isFunction($.fn.theiaStickySidebar)) {
                     $stickySidebar.theiaStickySidebar({
                         additionalMarginTop: marginTop,
                         additionalMarginBottom: 20,
@@ -1982,15 +1982,15 @@ var ATBS = ATBS || {};
         /* ============================================================================
         * Review Rating
         * ==========================================================================*/
-        atbs_accordionButton :function() {
+        atbs_accordionButton: function () {
             var accordion = $('.atbs-accordion');
             $(accordion).each(function () {
                 var item_current = $(this);
-                $(this).find('.atbs-accordion-btn').on('click',function () {
-                    var accordion_btn =  $(this).toggleClass('active');
+                $(this).find('.atbs-accordion-btn').on('click', function () {
+                    var accordion_btn = $(this).toggleClass('active');
                     var accordion_panel = accordion_btn.parents('.atbs-accordion').find('.atbs-accordion-panel');
                     accordion_panel.toggleClass("active");
-                    if (parseInt(accordion_panel.css('max-height')) ) {
+                    if (parseInt(accordion_panel.css('max-height'))) {
                         accordion_panel.css('max-height', 0);
                         accordion_panel.removeClass("active");
                         accordion_btn.removeClass("active");
@@ -2011,19 +2011,19 @@ var ATBS = ATBS || {};
         /* ============================================================================
         * Review Rating
         * ==========================================================================*/
-        reviewRatingStarIcon: function() {
+        reviewRatingStarIcon: function () {
             var reviews_rating_star = $('.atbs-reviews-section');
             reviews_rating_star.each(function () {
                 var theCurrentReviewForm = $(this);
                 var rating_reviews_list = $(this).find('.rating-form');
                 $(rating_reviews_list).each(function () {
                     var star_score_icon = $(this).find('.star-item');
-                    star_score_icon.on('click',function () {
+                    star_score_icon.on('click', function () {
                         $(star_score_icon).removeClass("active");
                         var star_score_value = $(this).index();
                         $(this).parents('.rating-star').siblings('.user-star-rating').attr('value', 5 - star_score_value);
                         star_score_icon.each(function () {
-                            if ($(this).index() >= star_score_value){
+                            if ($(this).index() >= star_score_value) {
                                 //console.log($(this).index());
                                 $(this).addClass("active");
                             }
@@ -2032,21 +2032,21 @@ var ATBS = ATBS || {};
                 });
             });
         },
-        reviewScoreList: function(){
+        reviewScoreList: function () {
             var reviews_rating_score = $('.atbs-reviews-section');
             reviews_rating_score.each(function () {
                 var score_list_item = $(this).find(".score-item");
                 $(score_list_item).each(function () {
-                    var percent = parseFloat( $(this).data('total') );
+                    var percent = parseFloat($(this).data('total'));
                     var percent_default = 0;
-                    var score_item = setInterval(frame, 0  );
+                    var score_item = setInterval(frame, 0);
                     var $this = $(this);
                     function frame() {
                         if (percent_default >= percent) {
                             clearInterval(score_item);
                         } else {
                             percent_default++;
-                            $this.find(".score-percent").css({"width": percent_default +'%'});
+                            $this.find(".score-percent").css({ "width": percent_default + '%' });
                             $this.find(".score-number").text(percent_default / 10);
                             // console.log(percent_default);
                         }
@@ -2054,7 +2054,7 @@ var ATBS = ATBS || {};
                 });
             });
         },
-        reviewScoreProgress: function(){
+        reviewScoreProgress: function () {
             var element = $('.review-count-percent');
             element.each(function () {
                 var $this = $(this);
@@ -2063,18 +2063,18 @@ var ATBS = ATBS || {};
 
                 var RADIUS = 48;
                 var CIRCUMFERENCE = 2 * Math.PI * RADIUS;
-                $(progressValue).css({'stroke-dasharray' : CIRCUMFERENCE });
+                $(progressValue).css({ 'stroke-dasharray': CIRCUMFERENCE });
                 progress(data_score);
                 function progress(value) {
                     var progress = value / 100;
                     var dashoffset = CIRCUMFERENCE * (1 - progress);
                     // $(progressValue).css({'--data-review-score': 'red' });
-                    $(progressValue).css({'stroke-dashoffset': dashoffset });
+                    $(progressValue).css({ 'stroke-dashoffset': dashoffset });
                     // $(progressValue).style.setProperty('--data-review-score', 'red');
                 }
             });
         },
-        textFadeLimit: function(){
+        textFadeLimit: function () {
             var element = $('.text-line-limit-fade');
             element.each(function () {
                 var $this = $(this);
@@ -2082,17 +2082,17 @@ var ATBS = ATBS || {};
                 var element_context = $(this).find('.line-limit-default');
 
                 var height_context = $(element_context).height();
-                var line_height_context  = parseInt($(element_context).css('line-height'));
+                var line_height_context = parseInt($(element_context).css('line-height'));
                 var limit_height_context = line_height_context * 2;
-                if( height_context > limit_height_context){
+                if (height_context > limit_height_context) {
                     $this.addClass("show-btn-more");
                     $(element_context).addClass("line-limit-fade");
                 }
                 /*unlimited height excerpt*/
                 var element_btn_toggle = $($this).find('.btn-line-limit-fade');
-                element_btn_toggle.on('click',function () {
+                element_btn_toggle.on('click', function () {
                     $(element_btn_toggle).find('span').toggleClass('active');
-                    if ( !$(element_context).hasClass('line-limit-fade')) {
+                    if (!$(element_context).hasClass('line-limit-fade')) {
                         $(element_context).removeClass("line-show-full");
                         $(element_context).css('max-height', limit_height_context + 'px');
                         $(element_context).addClass("line-limit-fade");
@@ -2104,8 +2104,8 @@ var ATBS = ATBS || {};
                 });
 
                 $(window).on('resize', $.debounce(250, function (e) {
-                    if ( $(element_context).hasClass('line-show-full')) {
-                        $(element_context).css('max-height',  $(element_context).get(0).scrollHeight + 'px');
+                    if ($(element_context).hasClass('line-show-full')) {
+                        $(element_context).css('max-height', $(element_context).get(0).scrollHeight + 'px');
                     }
 
                 }));
@@ -2125,7 +2125,7 @@ var ATBS = ATBS || {};
                 }
             });
             theme_mode.each(function () {
-                $(this).on('click',function () {
+                $(this).on('click', function () {
                     $(this).toggleClass("active");
                     var theme_mode_status = {};
                     theme_mode_status.status = 'true';
@@ -2133,10 +2133,10 @@ var ATBS = ATBS || {};
                 });
                 function addModeStatus(theme_mode_status) {
                     var status = theme_mode_status.status;
-                    var item = {Status : status};
+                    var item = { Status: status };
                     theme_penal_localStorage.push(item);
                     saveStatus();
-                    if(theme_penal_localStorage.length >= 2) {
+                    if (theme_penal_localStorage.length >= 2) {
                         localStorage.removeItem("theme_penal_localStorage");
                         theme_penal_localStorage = [];
                     }
@@ -2164,7 +2164,7 @@ var ATBS = ATBS || {};
         atbs_bookmark: function () {
             var post_button_bookmark = $('.post-button-bookmark');
             post_button_bookmark.each(function () {
-                $(this).on('click',function () {
+                $(this).on('click', function () {
                     var btn_bookmark_status = $(this).find('.btn-bookmark');
                     $(btn_bookmark_status).toggleClass('active');
                 });
@@ -2185,7 +2185,7 @@ var ATBS = ATBS || {};
 
     ATBS.documentOnLoad = {
 
-        init: function() {
+        init: function () {
             ATBS.header.smartAffix.compute(); //recompute when all the page + logos are loaded
             ATBS.header.smartAffix.updateState(); // update state
             ATBS.documentOnReady.stickySidebar();
@@ -2196,13 +2196,13 @@ var ATBS = ATBS || {};
     /* ============================================================================
      * Priority+ menu
      * ==========================================================================*/
-    ATBS.priorityNav = function($menu) {
+    ATBS.priorityNav = function ($menu) {
         var $btn = $menu.find('button');
         var $menuWrap = $menu.find('.navigation');
         var $menuItem = $menuWrap.children('li');
         var hasMore = false;
 
-        if(!$menuWrap.length) {
+        if (!$menuWrap.length) {
             return;
         }
 
@@ -2213,7 +2213,7 @@ var ATBS = ATBS || {};
             var navWidth = 0;
 
             $menuItem = $menuWrap.children('li');
-            $menuItem.each(function() {
+            $menuItem.each(function () {
                 navWidth += $(this)[0].getBoundingClientRect().width;
             });
 
@@ -2231,7 +2231,7 @@ var ATBS = ATBS || {};
                     var $menuItems = $menuWrap.children('li:not(.priority-nav__more)');
                     var itemsToHideCount = 1;
 
-                    $($menuItems.get().reverse()).each(function(index){
+                    $($menuItems.get().reverse()).each(function (index) {
                         navWidth -= $(this)[0].getBoundingClientRect().width;
                         if (navWidth > availableSpace) {
                             itemsToHideCount++;
@@ -2242,7 +2242,7 @@ var ATBS = ATBS || {};
 
                     var $itemsToHide = $menuWrap.children('li:not(.priority-nav__more)').slice(-itemsToHideCount);
 
-                    $itemsToHide.each(function(index){
+                    $itemsToHide.each(function (index) {
                         $(this).attr('data-width', $(this)[0].getBoundingClientRect().width);
                     });
 
@@ -2256,7 +2256,7 @@ var ATBS = ATBS || {};
                             itemsToShowCount = 1;
                         }
                     } else {
-                        $moreItems.each(function(index){
+                        $moreItems.each(function (index) {
                             navWidth += $(this).data('width');
                             if (navWidth <= availableSpace) {
                                 itemsToShowCount++;
@@ -2291,7 +2291,7 @@ var ATBS = ATBS || {};
                     var $menuItems = $menuWrap.children('li');
                     var itemsToHideCount = 1;
 
-                    $($menuItems.get().reverse()).each(function(index){
+                    $($menuItems.get().reverse()).each(function (index) {
                         navWidth -= $(this)[0].getBoundingClientRect().width;
                         if (navWidth > availableSpace) {
                             itemsToHideCount++;
@@ -2302,7 +2302,7 @@ var ATBS = ATBS || {};
 
                     var $itemsToHide = $menuWrap.children('li:not(.priority-nav__more)').slice(-itemsToHideCount);
 
-                    $itemsToHide.each(function(index){
+                    $itemsToHide.each(function (index) {
                         $(this).attr('data-width', $(this)[0].getBoundingClientRect().width);
                     });
 
@@ -2313,12 +2313,12 @@ var ATBS = ATBS || {};
             }
         }
 
-        $window.on('load webfontLoaded', calcWidth );
-        $window.on('resize', $.throttle( 50, calcWidth ));
+        $window.on('load webfontLoaded', calcWidth);
+        $window.on('resize', $.throttle(50, calcWidth));
     }
 
-    $document.ready( ATBS.documentOnReady.init );
-    $window.on('load', ATBS.documentOnLoad.init );
-    $window.on( 'resize', ATBS.documentOnResize.init );
+    $document.ready(ATBS.documentOnReady.init);
+    $window.on('load', ATBS.documentOnLoad.init);
+    $window.on('resize', ATBS.documentOnResize.init);
 
 })(jQuery);
