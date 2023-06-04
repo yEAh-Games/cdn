@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function () {
         setTimeout(function () {
             loadingContainer.style.display = 'none';
             loginContainer.style.display = 'block';
-        }, 2000);
+        }, 1000);
 
         loginContainer.appendChild(loginButton);
     }
