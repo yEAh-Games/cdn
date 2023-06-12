@@ -10,3 +10,6 @@ Disallow: /_includes/*
 Disallow: /.gitignore
 Disallow: /CNAME
 Disallow: /_config.yml
+Disallow: /cdn-cgi/
+Disallow: /cdn-cgi
+Disallow: /cdn-cgi/*
