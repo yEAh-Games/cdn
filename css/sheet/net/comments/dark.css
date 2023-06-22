@@ -44,7 +44,7 @@ main {
     --color-btn-primary-border: rgba(205, 217, 229, .1);
     --color-btn-primary-shadow: 0 0 transparent;
     --color-btn-primary-inset-shadow: 0 0 transparent;
-    --color-btn-primary-hover-bg: #46954a;
+    --color-btn-primary-hover-bg: #ff7c7c;
     --color-btn-primary-hover-border: rgba(205, 217, 229, .1);
     --color-btn-primary-selected-bg: #ff4747;
     --color-btn-primary-selected-shadow: 0 0 transparent;
