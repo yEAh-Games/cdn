@@ -2849,6 +2849,7 @@ time {
     border-radius: 50%;
     overflow: hidden;
     margin-right: 15px;
+    background-color:#1d1f24
 }
 .post-author__avatar img {
     width: 100%;
